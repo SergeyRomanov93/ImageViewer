@@ -41,13 +41,13 @@
 
         </StackPanel>
 
-        <ListBox x:Name="ListOfPhotos"
-                 ItemsSource="{Binding SearchResults,UpdateSourceTrigger=PropertyChanged}"
+        <ListBox ItemsSource="{Binding SearchResults,UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
                  Grid.Row="0"
-                 Background="Lavender"/>
+                 Background="Lavender"
+                 SelectionMode="Single"/>
 
-        <Image Source="{Binding Filename}"
+        <Image Source="{Binding FilePath}"
                Grid.Column="0"
                Grid.Row="0"/>
 

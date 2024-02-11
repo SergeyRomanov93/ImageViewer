@@ -10,15 +10,14 @@ namespace ImageViewer.ViewModels
     {
         private string _photosDirectory;
         private List<string> _photos;
+        private string _filename;
+
+        public string FilePath { get => _filename; set => SetProperty(ref _filename, value); }
 
         public string PhotosDirectory
         {
-            get { return _photosDirectory; }
-            set
-            {
-                _photosDirectory = value;
-                RaisePropertyChanged();
-            }
+            get => _photosDirectory;
+            set => SetProperty(ref _photosDirectory, value);
         }
 
         public RelayCommand SearchButtonCommand { get; set; }
@@ -26,11 +25,7 @@ namespace ImageViewer.ViewModels
         public List<string> SearchResults
         {
             get => _photos;
-            set
-            {
-                _photos = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _photos, value);
         }
 
         public MainWindowViewModel()
@@ -56,6 +51,11 @@ namespace ImageViewer.ViewModels
             }
 
             return files;
+        }
+
+        public void ImageSelected(string fileName)
+        {
+            FilePath = $"{PhotosDirectory} + {fileName}.jpg";
         }
     }
 }

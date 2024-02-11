@@ -42,7 +42,7 @@
         </StackPanel>
 
         <ListBox x:Name="ListOfPhotos"
-                 ItemsSource="{Binding SearchResults}"
+                 ItemsSource="{Binding SearchResults,UpdateSourceTrigger=PropertyChanged}"
                  Grid.Column="1"
                  Grid.Row="0"
                  Background="Lavender"/>

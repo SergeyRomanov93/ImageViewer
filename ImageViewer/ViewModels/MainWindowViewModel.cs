@@ -9,6 +9,8 @@ namespace ImageViewer.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private string _photosDirectory;
+        private List<string> _photos;
+
         public string PhotosDirectory
         {
             get { return _photosDirectory; }
@@ -21,7 +23,15 @@ namespace ImageViewer.ViewModels
 
         public RelayCommand SearchButtonCommand { get; set; }
 
-        public List<string> SearchResults { get; }
+        public List<string> SearchResults
+        {
+            get => _photos;
+            set
+            {
+                _photos = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public MainWindowViewModel()
         {
@@ -33,13 +43,14 @@ namespace ImageViewer.ViewModels
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.ShowDialog();
             PhotosDirectory = folderBrowserDialog.SelectedPath;
+            SearchResults = GetFiles(PhotosDirectory);
         }
 
-        private List<string> GetFiles()
+        private List<string> GetFiles(string photosDirectory)
         {
             List<string> files = new List<string>();
 
-            foreach (var file in Directory.EnumerateFiles(PhotosDirectory, $"*.jpeg|.png|.tiff"))
+            foreach (var file in Directory.EnumerateFiles(photosDirectory, "*.jpg"))
             {
                 files.Add(Path.GetFileNameWithoutExtension(file));
             }

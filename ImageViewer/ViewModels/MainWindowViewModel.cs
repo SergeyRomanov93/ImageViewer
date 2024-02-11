@@ -9,7 +9,15 @@ namespace ImageViewer.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private string _photosDirectory;
-        public string PhotosDirectory { get => _photosDirectory; set => _photosDirectory = value; }
+        public string PhotosDirectory
+        {
+            get { return _photosDirectory; }
+            set
+            {
+                _photosDirectory = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public RelayCommand SearchButtonCommand { get; set; }
 
@@ -17,14 +25,14 @@ namespace ImageViewer.ViewModels
 
         public MainWindowViewModel()
         {
-            SearchButtonCommand = new RelayCommand(o => Search(ref _photosDirectory));
+            SearchButtonCommand = new RelayCommand(o => Search());
         }
 
-        private void Search(ref string photosDirectory)
+        private void Search()
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.ShowDialog();
-            photosDirectory = folderBrowserDialog.SelectedPath;
+            PhotosDirectory = folderBrowserDialog.SelectedPath;
         }
 
         private List<string> GetFiles()

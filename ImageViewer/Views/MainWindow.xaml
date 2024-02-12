@@ -1,55 +1,117 @@
 ﻿<Window x:Class="ImageViewer.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ImageViewer" 
         xmlns:viewmodel="clr-namespace:ImageViewer.ViewModels"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        mc:Ignorable="d" ResizeMode="CanMinimize"
+        Title="Просмотр изображений" Height="450" Width="800">
 
     <Window.DataContext>
         <viewmodel:MainWindowViewModel/>
     </Window.DataContext>
 
-    <Grid>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
+    <Grid Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="350"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="1" 
-                    Grid.Row="1" 
-                    Orientation="Vertical"
-                    VerticalAlignment="Center"
+        <StackPanel Grid.Row="0" 
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Center" 
                     HorizontalAlignment="Center">
 
-            <TextBox IsReadOnly="True" 
-                     Width="200" 
-                     Text="{Binding PhotosDirectory, UpdateSourceTrigger=PropertyChanged}"/>
-            
             <Button Content="Обзор" 
                     Width="100" 
-                    Margin="10"
+                    Margin="10" 
                     Command="{Binding SearchButtonCommand}"/>
+
+            <TextBox IsReadOnly="True" 
+                     VerticalAlignment="Center" 
+                     Width="400" 
+                     Text="{Binding PhotosDirectory, UpdateSourceTrigger=PropertyChanged}"/>
 
         </StackPanel>
 
-        <ListBox ItemsSource="{Binding SearchResults,UpdateSourceTrigger=PropertyChanged}"
-                 Grid.Column="1"
-                 Grid.Row="0"
-                 Background="Lavender"
-                 SelectionMode="Single"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <Image Source="{Binding FilePath}"
-               Grid.Column="0"
-               Grid.Row="0"/>
+            <ListBox Grid.Column="1" 
+                     Background="Lavender" 
+                     SelectionMode="Single"
+                     ItemsSource="{Binding SearchResults,UpdateSourceTrigger=PropertyChanged}"
+                     SelectedItem="{Binding SelectedPhoto}" 
+                     DisplayMemberPath="Value"/>
 
+            <Grid Grid.Column="0">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" 
+                      Margin="5" 
+                      ClipToBounds="True">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Column="0" 
+                           MaxHeight="320" 
+                           MaxWidth="320" 
+                           Source="{Binding Image}">
+                        
+                        <Image.RenderTransform>
+                            
+                            <ScaleTransform ScaleX="{Binding Factor}" 
+                                            ScaleY="{Binding Factor}" 
+                                            CenterX="{Binding Horizontal}" 
+                                            CenterY="{Binding Vertical}"/>
+                            
+                        </Image.RenderTransform>
+                        
+                    </Image>
+
+                    <ScrollBar Grid.Column="1"  
+                               Orientation="Vertical" 
+                               Minimum="0" Maximum="{Binding VMax}" 
+                               Value="{Binding Vertical}"/>
+                    
+                </Grid>
+
+                <ScrollBar Grid.Row="1" 
+                           Width="320" 
+                           Orientation="Horizontal" 
+                           Minimum="0" 
+                           Maximum="{Binding HMax}" 
+                           Value="{Binding Horizontal}"/>
+
+                <StackPanel Grid.Row="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+
+                    <TextBlock Margin="10">Увеличение</TextBlock>
+
+
+                    <Slider Grid.Row="2" 
+                        Width="200" 
+                        Minimum="1" 
+                        Maximum="10" 
+                        Margin="10"
+                        Value="{Binding Factor}"/>
+
+
+                </StackPanel>
+                
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
